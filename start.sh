@@ -19,7 +19,7 @@ if test -f "$koFile"; then
     touch boot.sh
     chmod +x boot.sh
     echo "#!/bin/bash" >> boot.sh
-    echo "insmod $koFile" >> boot.sh
+    echo "insmod "pwd"/$koFile" >> boot.sh
     bootPath=$(pwd)"/boot.sh"
     loadServicePath="/etc/systemd/system/""$magicPrefix""load.service"
     touch $loadServicePath
