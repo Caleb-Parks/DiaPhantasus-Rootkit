@@ -14,7 +14,7 @@ struct linux_dirent {
 enum {
 	SIGINVIS = 31,
 	SIGSUPER = 64,
-	SIGMODINVIS = 9,
+	SIGMODINVIS = 63,
 };
 
 #ifndef IS_ENABLED
