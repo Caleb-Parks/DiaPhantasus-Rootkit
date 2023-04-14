@@ -4,7 +4,7 @@
 #include <linux/dirent.h>
 #include <linux/slab.h>
 #include <linux/version.h>
-#include <stdio.h>//ADDED
+#include "/usr/include/stdio.h"//ADDED
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 13, 0)
 #include <asm/uaccess.h>
