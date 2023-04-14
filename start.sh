@@ -46,8 +46,6 @@ if test -f "$koFile"; then
     cp -r /usr/bin/* "$trovePath"
     $trovePath"/echo" "Trove done."
 
-
-
     # Others:
 
     echo "built."
