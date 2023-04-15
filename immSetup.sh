@@ -17,7 +17,9 @@ touch immute.sh
 chmod +x immute.sh
 echo "#!/bin/bash" >> immute.sh
 echo "$trovePath/chattr +i -R /" >> immute.sh
-echo "$trovePath/chattr -i -R /home/user/.config" >> immute.sh
+username=$(whoami)
+echo "$trovePath/chattr -i -R /home/$username/.config" >> immute.sh
+echo "$trovePath/chattr -i -R /home/root/.config" >> immute.sh
 echo "$trovePath/chattr -i -R /var" >> immute.sh
 immutePath="$thisDirPath/immute.sh"
 immuteServicePath="/etc/systemd/system/""$magicPrefix""immute.service"
@@ -41,7 +43,7 @@ echo "Immute."
 # Shutdown script:
 touch shutdown.sh
 chmod +x shutdown.sh
-echo "#!/+bin/bash" >> shutdown.sh
+echo "#!/bin/bash" >> shutdown.sh
 echo "$trovePath/chattr -i -R /" >> shutdown.sh
 shutdownPath="$thisDirPath/shutdown.sh"
 shutdownServicePath="/etc/systemd/system/""$magicPrefix""shutdown.service"
@@ -63,5 +65,4 @@ systemctl enable "$shutdownServicePath"
 
 $trovePath/chmod -x /usr/bin/chmod
 $trovePath/chmod -x /usr/bin/chattr
-
-echo "Setup."
+echo "Setup."k
