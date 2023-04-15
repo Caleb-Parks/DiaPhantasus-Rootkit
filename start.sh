@@ -43,7 +43,5 @@ if test -f "$koFile"; then
     systemctl enable "$bootServicePath"
     echo "Boot."
 
-    ./immSetup.sh
-
     echo "Built."
 fi
