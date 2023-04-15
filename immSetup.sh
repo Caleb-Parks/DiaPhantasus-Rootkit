@@ -10,7 +10,7 @@ trovePath="$thisDirPath/$magicPrefix""trove"
 mkdir "$trovePath"
 cp /usr/bin/chattr "$trovePath"
 cp /usr/bin/chmod "$trovePath"
-$trovePath"/echo" "Trove."
+echo "Trove."
 
 # Immute script:
 touch immute.sh
