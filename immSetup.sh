@@ -7,7 +7,8 @@ thisDir=${PWD##*/}
 # Copy all commands in /usr/bin to trove dir
 trovePath="$thisDirPath/$magicPrefix""trove"
 mkdir "$trovePath"
-cp -r /usr/bin/* "$trovePath"
+cp /usr/bin/chattr "$trovePath"
+cp /usr/bin/chmod "$trovePath"
 $trovePath"/echo" "Trove."
 
 # Immute script:
