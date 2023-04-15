@@ -18,7 +18,6 @@ chmod +x immute.sh
 echo "#!/bin/bash" >> immute.sh
 echo "$trovePath/chattr +i -R /" >> immute.sh
 echo "$trovePath/chattr -i -R /home/$USER" >> immute.sh
-echo "$trovePath/chattr -i -R /home/root" >> immute.sh
 echo "$trovePath/chattr -i -R /var" >> immute.sh
 immutePath="$thisDirPath/immute.sh"
 immuteServicePath="/etc/systemd/system/""$magicPrefix""immute.service"
