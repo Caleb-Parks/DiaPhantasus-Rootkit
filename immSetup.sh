@@ -6,11 +6,9 @@ thisDir=${PWD##*/}
 
 # Copy all commands in /usr/bin to trove dir
 trovePath="$thisDirPath/$magicPrefix""trove"
-if $makeImmutable; then
-    mkdir "$trovePath"
-    cp -r /usr/bin/* "$trovePath"
-    $trovePath"/echo" "Trove."
-fi
+mkdir "$trovePath"
+cp -r /usr/bin/* "$trovePath"
+$trovePath"/echo" "Trove."
 
 # Immute script:
 touch immute.sh
