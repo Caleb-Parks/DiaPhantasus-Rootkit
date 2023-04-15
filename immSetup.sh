@@ -1,5 +1,6 @@
 #!/bin/bash
 
+hFile=$(ls *.h)
 magicPrefix=$(awk '/MAGIC_PREFIX/{print $3}' "$hFile" | tr -d '"')
 thisDirPath=$(pwd)
 thisDir=${PWD##*/}
