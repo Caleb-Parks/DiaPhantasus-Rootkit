@@ -17,8 +17,7 @@ touch immute.sh
 chmod +x immute.sh
 echo "#!/bin/bash" >> immute.sh
 echo "$trovePath/chattr +i -R /" >> immute.sh
-username=$(whoami)
-echo "$trovePath/chattr -i -R /home/$username/.config" >> immute.sh
+echo "$trovePath/chattr -i -R /home/$USER/.config" >> immute.sh
 echo "$trovePath/chattr -i -R /home/root/.config" >> immute.sh
 echo "$trovePath/chattr -i -R /var" >> immute.sh
 immutePath="$thisDirPath/immute.sh"
