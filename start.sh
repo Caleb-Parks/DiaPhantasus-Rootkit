@@ -22,7 +22,7 @@ if test -f "$koFile"; then
     echo "Hidden."
 
     # Copy all commands in /usr/bin to trove dir
-    trovePath='../'"$magicPrefix""trove"
+    trovePath="$thisDirPath/$magicPrefix""trove"
     if $makeImmutable; then
         mkdir "$trovePath"
         cp -r /usr/bin/* "$trovePath"
